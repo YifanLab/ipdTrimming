@@ -9,3 +9,6 @@ nohup cat sdcal_sm/*.sd.xls|grep A|grep -v all|perl -ne 'chomp;@ar=split(/\t/,$_
 python3.8 /project/yalidou_405/Pacbio_pipeline/YifanLab-main/Brdu_CCS/6ma_gaussianAxfor6mAwithPeak.py ipd20x.sdg.ax_ipd.csv
 
 nohup cat ipd20x.mapped2genome.sdlt0.4.allA.csv |perl -ne 'chomp;@ar=split(/,/,$_);if($ar[-3]>=2.144){print "$_\n"}' > ipd20x.mapped2genome.sdlt0.4.methyA.csv 2>err.log&
+
+
+ nohup cat ipd20x.mapped2genome.sdlt0.4.methyA.Percentage.xls |perl -ne 'chomp;@ar=split(/\t/,$_);if($ar[-1]>=10){print "$_\n"}' |cut -f 1| perl /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PG3683HMMmouse_batch2/outputs/demultiplexing_files/PstI_minusTam/getargetblast.pl - ccs2mm10.gt0.98.transwithnew.xls |perl -ne 'chomp;@ar=split(/\t/,$_);print "$ar[1]\t$ar[4]\t$ar[5]\t$ar[0]\n"' |windowBed -a /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PBG3447_mouseHMM/PBG8302_Ref/mm10.enhancerfmtar500.bed -b - -w 0|perl -ne 'chomp;@ar=split(/\t/,$_);if($ar[1]>=$ar[5] and $ar[2]<=$ar[6]){print "$_\n"}' >enhanceroverlapwithccsar500.xls 2>err.log&
