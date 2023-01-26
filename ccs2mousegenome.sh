@@ -12,3 +12,14 @@ nohup cat ipd20x.mapped2genome.sdlt0.4.allA.csv |perl -ne 'chomp;@ar=split(/,/,$
 
 
  nohup cat ipd20x.mapped2genome.sdlt0.4.methyA.Percentage.xls |perl -ne 'chomp;@ar=split(/\t/,$_);if($ar[-1]>=10){print "$_\n"}' |cut -f 1| perl /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PG3683HMMmouse_batch2/outputs/demultiplexing_files/PstI_minusTam/getargetblast.pl - ccs2mm10.gt0.98.transwithnew.xls |perl -ne 'chomp;@ar=split(/\t/,$_);print "$ar[1]\t$ar[4]\t$ar[5]\t$ar[0]\n"' |windowBed -a /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PBG3447_mouseHMM/PBG8302_Ref/mm10.enhancerfmtar500.bed -b - -w 0|perl -ne 'chomp;@ar=split(/\t/,$_);if($ar[1]>=$ar[5] and $ar[2]<=$ar[6]){print "$_\n"}' >enhanceroverlapwithccsar500.xls 2>err.log&
+ 
+ nohup cat ipd20x.mapped2genome.sdlt0.4.methyA.Percentage.xls |perl -ne 'chomp;@ar=split(/\t/,$_);if($ar[-1]>=10){print "$_\n"}'|cut -f 1|perl /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PG3683HMMmouse_batch2/outputs/demultiplexing_files/PstI_minusTam/getargetblast.pl - ccs2mm10.gt0.98.transwithnew.xls|perl -ne 'chomp;@ar=split(/\t/,$_);print "$ar[1]\t$ar[4]\t$ar[5]\t$ar[0]\n"' |sort -k1,1 -k2,2n|windowBed -b /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PBG3447_mouseHMM/PBG8302_Ref/mm10.enhancerfmtar500.bed -a - -w 0 |perl -ne 'chomp;@ar=split(/\t/,$_);if($ar[1] <=$ar[5] and $ar[2]>=$ar[6]){print "$_\n"}' >enhanceroverlapwithccsar500.xls 2>err.log&
+ 
+#ccs to genome##
+nohup perl /project/yalidou_405/Pacbio_pipeline/YifanLab-main/sb210_seq2_rep2/5e318406-a881-11ec-a98e-b07b25d42266/blast_mapping/ccsanalysi_Perl/ccs2refpostion_blastn.pl ccs2mm10.gt0.98.transwithnew.xls ipd20x.mapped2genome.sdlt0.4.methyA.xls >ipd20x.mapped2genome.sdlt0.4.methyAongenome.xls 2>err.log&
+
+#motif around 6nAcount#
+nohup perl  /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PBG3447_mouseHMM/HindIII_plusTam/gettargetregionmethypos_onlongmolfull.pl ipd20x.mapped2genome.sdlt0.4.methyAongenome.xls enhanceroverlapwithccsar500.xls >enhancer.ar500m6Acount.xls 2>err.log&
+
+
+nohup computeMatrix scale-regions -S bowtie2ref.HMM_H3K4me1_1.bw  -R mm10.PEar500.bed -o mm10.PEh3k4m1.tag.gz 2>err.log&
