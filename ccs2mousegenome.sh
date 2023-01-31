@@ -23,3 +23,9 @@ nohup perl  /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PBG3447_mouseHMM/
 
 
 nohup computeMatrix scale-regions -S bowtie2ref.HMM_H3K4me1_1.bw  -R mm10.PEar500.bed -o mm10.PEh3k4m1.tag.gz 2>err.log&
+
+
+##Centremeric region analysi#
+
+nohup less ecog2.centrall.xls|perl -ne 'chomp;@ar=split(/\t/,$_);@ele=split(/,/,$ar[3]);@pos=split(/,/,$ar[2]);if($#ele>=4){for($i=0;$i<=$#ele-4;$i++){$subele=join(",", @ele[$i..$i+4]);$subpos=join(",",@pos[$i..$i+5])  ;print "$ar[0]\t$subele\t$subpos\n"}}'|grep 'D2,D1,D2,D1,D1'|perl -ne 'chomp;@ar=split(/\t/,$_);@pos=split(/,/,$ar[-1]);$len=$pos[-1]-$pos[0]+1;print "$_\t$pos[0],$pos[-1]\n"'|perl formatcentrosm.pl - |perl encodeseq.withipdATall.pl /project/xwang787_650/PB_000352_human/WGA_EcoGII/ccs.hifi.fa /project/xwang787_650/PB_000352_human/WGA_EcoGII/ccsallA.methyAgt2.0.csv - >ecog2.D21211encode.xls 2>err.log&
+
