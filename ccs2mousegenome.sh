@@ -20,6 +20,9 @@ nohup perl /project/yalidou_405/Pacbio_pipeline/YifanLab-main/sb210_seq2_rep2/5e
 
 #motif around 6nAcount#
 nohup perl  /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PBG3447_mouseHMM/HindIII_plusTam/gettargetregionmethypos_onlongmolfull.pl ipd20x.mapped2genome.sdlt0.4.methyAongenome.xls enhanceroverlapwithccsar500.xls >enhancer.ar500m6Acount.xls 2>err.log&
+nohup cat mouseminusoverlapwithctcf.xls |cut -f 1-4,7-12|perl /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PB000486_20220706/NF_EcoGII/gettargetregionmethypos_onlongmolfull.pl mouse.mergedminus.methyongenomesort.xls - >ctcf.mouse6mAminus.xls 2>err.log&
+nohup less mouseplusoverlapwithctcf.xls|cut -f 1-4,7-12|perl /project/yalidou_405/Pacbio_pipeline/YifanLab-main/PB000486_20220706/NF_EcoGII/gettargetregionmethypos_onlongmolfull.pl mouse.mergedplus.methyongenomesort.xls - >ctcf.mouse6mAplus.xls 2>err.log&
+
 
 
 nohup computeMatrix scale-regions -S bowtie2ref.HMM_H3K4me1_1.bw  -R mm10.PEar500.bed -o mm10.PEh3k4m1.tag.gz 2>err.log&
