@@ -1,0 +1,1 @@
+Here is the modified CCS for trimming outlier IPD value in subread
