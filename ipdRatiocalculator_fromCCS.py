@@ -37,7 +37,12 @@
 # SUCH DAMAGE.
 #################################################################################$$
 
-# Usage PerMoleculeIPDRatio.py <bamIn> <bamOut>
+
+####Here is a modified PerMoleculeIPDRatio.py from PacBio. In this script, we implemented the multi-processing
+# to accelerate the running time of IPD ratio calculation.
+
+
+# Usage ipdRatiocalculator_fromCCS.py <bamIn> <bamOut>
 # model used is hardcoded in the script
 # input bam is an unalined HiFi kenetics bam processed with ccs-kinetics-bystrandify https://ccs.how/faq/kinetics.html
 # output bam is an unalinged bam with f array tag indicating ipd ratio
@@ -206,6 +211,12 @@ def _makeLookup(framepoints):
 _framepoints = _makeFramepoints()
 _frameToCode, _maxFramepoint = _makeLookup(_framepoints)
 
+def calculate_tmean(data, trim_percent = 0.1):
+    trim_count = int(len(data) * trim_percent)
+    sorted_data = np.sort(data)
+    trimmed_data = sorted_data[:-trim_count]
+    tmean_value = np.mean(trimmed_data)
+    return tmean_value
 
 def framesToCode(nframes):
     nframes = np.minimum(_maxFramepoint, nframes)
@@ -290,27 +301,33 @@ def process_bam_chunk(filename, gbmModel):
                 fi = read.get_tag('fi')
                 ri = read.get_tag('ri')
             if len(rawSeq) == len(fi) and len(fi) == len(ri):
-                fipNorm = fi / np.mean(fi)
+                fipNorm = fi / (np.mean(fi) if np.mean(fi) != 0 else 1e-10)
                 fiFrames = codeToFrames(read.get_tag('fi'))
-                fipFramesNorm = fiFrames / np.mean(fiFrames)
+                fipFramesNorm = fiFrames / (np.mean(fiFrames) if np.mean(fiFrames) != 0 else 1e-10)
+                fipFramesNorm_trim = fiFrames / (calculate_tmean(fiFrames) if calculate_tmean(fiFrames) !=0 else 1e-10)
                 fipr = fipFramesNorm / control
+                fipr_trim = fipFramesNorm_trim / control
                 fipnr = fipNorm / control
                 ri = read.get_tag('ri')
-                ripNorm = ri / np.mean(ri)
+                ripNorm = ri / (np.mean(ri) if np.mean(ri) != 0 else 1e-10)
                 ripnr = ripNorm / revcontrol
                 riFrames = codeToFrames(read.get_tag('ri'))
-                ripFramesNorm = riFrames / np.mean(riFrames)
+                ripFramesNorm_trim = riFrames / (calculate_tmean(riFrames) if calculate_tmean(riFrames) != 0 else 1e-10)
+                ripFramesNorm = riFrames / (np.mean(riFrames) if np.mean(riFrames) != 0 else 1e-10)
                 ripr = ripFramesNorm / revcontrol
-            read.set_tag('FC', array('f', control))
-            read.set_tag('FZ', array('f', fipNorm))
-            read.set_tag('FF', array('f', fipFramesNorm))
-            read.set_tag('FN', array('f', fipnr))
-            read.set_tag('FR', array('f', fipr))
-            read.set_tag('IC', array('f', revcontrol))
-            read.set_tag('IZ', array('f', ripNorm))
-            read.set_tag('IF', array('f', ripFramesNorm))
-            read.set_tag('IN', array('f', ripnr))
-            read.set_tag('IR', array('f', ripr))
+                ripr_trim = ripFramesNorm_trim / revcontrol
+                read.set_tag('FC', array('f', control))
+            #read.set_tag('FZ', array('f', fipNorm))
+                read.set_tag('FF', array('f', fipFramesNorm))
+            #read.set_tag('FN', array('f', fipnr))
+                read.set_tag('FR', array('f', fipr))
+            #read.set_tag('FT', array('f', fipr_trim))
+                read.set_tag('IC', array('f', revcontrol))
+            #read.set_tag('IZ', array('f', ripNorm))
+                read.set_tag('IF', array('f', ripFramesNorm))
+            #read.set_tag('IN', array('f', ripnr))
+                read.set_tag('IR', array('f', ripr))
+            #read.set_tag('IT', array('f', ripr_trim))
             out_bam.write(read)
     return temp_file_path
 
@@ -327,7 +344,7 @@ def worker_task(filename):
 
 def main(filename, output_filename):
     lut_path = "/project/xwang787_675/wentaoy_tools/software/smrtlink/install/smrtlink-release_10.1.0.119588/bundles/smrttools/install/smrttools-release_10.1.0.119588/private/pacbio/python3pkgs/kineticstools-py3/lib/python3.7/site-packages/kineticsTools/resources/SP3-C3.npz.gz"
-    num_threads = 10  # Adjust based on available cores
+    num_threads = 50  # Adjust based on available cores
     temp_dir = tempfile.mkdtemp()
     split_files = split_bam(filename, temp_dir, num_threads)
     pool = multiprocessing.Pool(processes=num_threads, initializer=worker_init, initargs=(lut_path,))
