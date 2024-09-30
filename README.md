@@ -14,6 +14,6 @@ For this modified CCS module, we get the CCS bam file with trimmed IPD value. Fo
 
 ```console
 usc@hpc:~$ python ipdRatiocalculator_FromCCS.py hifi.bam hifi.withIPDr.bam
-    #the cpu number can be set in this script.
+#the cpu number can be set in this script.
 ```
 
