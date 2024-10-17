@@ -17,3 +17,8 @@ usc@hpc:~$ python ipdRatiocalculator_FromCCS.py hifi.bam hifi.withIPDr.bam
 #the cpu number can be set in this script.
 ```
 
+After obtaining the IPDr for each site in individual molecule, then run 
+```console
+usc@hpc:~$ python ipdRatiocalculator_FromCCS.py hifi.bam hifi.withIPDr.bam
+#the cpu number can be set in this script.
+```
