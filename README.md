@@ -17,8 +17,8 @@ usc@hpc:~$ python ipdRatiocalculator_FromCCS.py hifi.bam hifi.withIPDr.bam
 #the cpu number can be set in this script.
 ```
 
-After obtaining the IPDr for each site in individual molecule, then run 
+Extract the IPDr for all A sites in individual molecule
 ```console
-usc@hpc:~$ python ipdRatiocalculator_FromCCS.py hifi.bam hifi.withIPDr.bam
-#the cpu number can be set in this script.
+usc@hpc:~$ python bamextractallAx_IPDvalue.py hifi.withIPDr.bam hifi.withIPDr_allA.xls
+#the effective coverage (ec) can be set in this script, the default value is 20.
 ```
