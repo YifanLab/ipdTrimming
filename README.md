@@ -51,7 +51,7 @@ PacBio SMRTLink Suite (Provides the kinetics tools)
 The script requires:
 
     A BAM file: Unaligned HiFi kinetic BAM file processed with ccs-kinetics-bystrandify
-    A lookup table (SP3-C3.npz.gz): This file is hardcoded into the script. Ensure the correct path is used. If you don't find this file, you can download from this site: [https://github.com/PacificBiosciences/kineticsTools/blob/master/kineticsTools/resources/SP3-C3.npz.gz].
+    A lookup table (SP3-C3.npz.gz): This file is hardcoded into the script. Ensure the correct path is used. If you don't find this file, you can download from this site: [ https://github.com/PacificBiosciences/kineticsTools/blob/master/kineticsTools/resources/SP3-C3.npz.gz ].
 
 ### Troubleshooting
 Issue: Missing Dependencies
