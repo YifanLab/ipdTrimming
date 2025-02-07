@@ -1,5 +1,5 @@
 # 6mA_footprint
-##Here is the comparison of pipelines between ipdSummary and ipdTrimming.
+## Here is the comparison of pipelines between ipdSummary and ipdTrimming.
 
 ![image](https://github.com/user-attachments/assets/610a723a-c0bf-4203-a37e-1d0d260944c3)
 
@@ -23,34 +23,34 @@ usc@hpc:~$ python bamextractallAx_IPDvalue.py hifi.withIPDr.bam hifi.withIPDr_al
 #the effective coverage (ec) can be set in this script, the default value is 20.
 ```
 
-##Tutorial for ipdRatiocalculator_fromCCS.py
+## Tutorial for ipdRatiocalculator_fromCCS.py
 ipdRatiocalculator_fromCCS.py is a Python script for processing HiFi kinetic BAM files to compute IPD (inter-pulse duration) ratios using a pre-trained model.
 ###Prerequisites
 Before running the script, ensure that the following dependencies are installed in a Python 3 environment:
-###1.1 Install Dependencies via Conda
+### 1.1 Install Dependencies via Conda
 It is recommended to use Conda to manage dependencies:
 ```console
 conda create -n ipdcalc_env python=3.7 -y
 conda activate ipdcalc_env
 conda install -c bioconda numpy pandas tqdm pysam pbcore
 ```
-###1.2 Install kineticsTools
+### 1.2 Install kineticsTools
 ```console
 git clone https://github.com/PacificBiosciences/kineticsTools.git
 cd kineticsTools
 pip install .
 ```
 
-###1.3 Required External Software
+### 1.3 Required External Software
 PacBio SMRTLink Suite (Provides the kinetics tools)
 
-###Preparing Input Files
+### Preparing Input Files
 The script requires:
 
     A BAM file: Unaligned HiFi kinetic BAM file processed with ccs-kinetics-bystrandify
     A lookup table (SP3-C3.npz.gz): This file is hardcoded into the script. Ensure the correct path is used. If you don't find this file, you can download from this site: https://github.com/PacificBiosciences/kineticsTools/blob/master/kineticsTools/resources/SP3-C3.npz.gz.
 
-###Troubleshooting
+### Troubleshooting
 Issue: Missing Dependencies
 
 If you encounter an error like:
