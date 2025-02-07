@@ -25,8 +25,11 @@ usc@hpc:~$ python bamextractallAx_IPDvalue.py hifi.withIPDr.bam hifi.withIPDr_al
 
 ## Tutorial for ipdRatiocalculator_fromCCS.py
 ipdRatiocalculator_fromCCS.py is a Python script for processing HiFi kinetic BAM files to compute IPD (inter-pulse duration) ratios using a pre-trained model.
-###Prerequisites
+
+### Prerequisites
+
 Before running the script, ensure that the following dependencies are installed in a Python 3 environment:
+
 ### 1.1 Install Dependencies via Conda
 It is recommended to use Conda to manage dependencies:
 ```console
